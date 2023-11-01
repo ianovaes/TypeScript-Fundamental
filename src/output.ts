@@ -1,4 +1,5 @@
 import { accessOptions, User } from "./models";
+import { IService, UserService } from "./service/service";
 
 class UserController{
     // propriedade
@@ -22,14 +23,9 @@ class UserController{
     }
 
     //funcionalidade
-    async getUser(): Promise<User[]> {
-        const response: Response = await fetch('http://localhost:5011/users');
-        const users: User[] = await response.json();
-        return users;
-    };
-      
-      async loadUserLayout(): Promise<void> {
-        const users: User[] = await this.getUser();
+    async loadUserLayout(): Promise<void> {
+        const service: IService<User> = new UserService<User>();
+        const users = await service.getItems();
       
         users.map((user: User) => {
           this.content.innerHTML += <string>this.createLine(user);
